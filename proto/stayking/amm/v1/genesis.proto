@@ -1,0 +1,9 @@
+syntax = "proto3";
+package stayking.amm.v1;
+
+import "gogoproto/gogo.proto";
+import "stayking/amm/v1/params.proto";
+
+option go_package = "github.com/soohoio/stayking-template-chain/x/amm/types";
+
+message GenesisState { Params params = 1 [ (gogoproto.nullable) = false ]; }

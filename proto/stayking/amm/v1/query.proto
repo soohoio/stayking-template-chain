@@ -1,0 +1,20 @@
+syntax = "proto3";
+package stayking.amm.v1;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "stayking/amm/v1/params.proto";
+
+option go_package = "github.com/soohoio/stayking-template-chain/x/amm/types";
+
+service Query {
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/stayking/amm/v1/params";
+  }
+}
+
+message QueryParamsRequest {}
+
+message QueryParamsResponse {
+  Params params = 1 [ (gogoproto.nullable) = false ];
+}

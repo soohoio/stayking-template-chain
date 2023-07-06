@@ -17,6 +17,7 @@ LEDGER_ENABLED ?= true
 SDK_PACK := $(shell go list -m github.com/cosmos/cosmos-sdk | sed  's/ /\@/g')
 TM_VERSION := $(shell go list -m github.com/tendermint/tendermint | sed 's:.* ::') # grab everything after the space in "github.com/tendermint/tendermint v0.34.7"
 DOCKER := $(shell which docker)
+DOCKER_BUF := $(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace bufbuild/buf:1.7.0
 BUILDDIR ?= $(CURDIR)/build
 
 export GO111MODULE = on
@@ -164,35 +165,31 @@ endif
 .PHONY: run-tests $(TEST_TARGETS)
 
 ###############################################################################
-###                                Linting                                  ###
+###                                Protobuf                                 ###
 ###############################################################################
 
-lint:
-	@echo "--> Running linter"
-	@go run github.com/golangci/golangci-lint/cmd/golangci-lint run --timeout=10m
-
-format:
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/lcd/statik/statik.go" | xargs gofmt -w -s
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/lcd/statik/statik.go" | xargs misspell -w
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/lcd/statik/statik.go" | xargs goimports -w -local github.com/cosmos/cosmos-sdk
-
-.PHONY: all build-linux install format lint \
-	go-mod-cache draw-deps clean build \
+containerProtoVer=v0.7
+containerProtoImage=tendermintdev/sdk-proto-gen:$(containerProtoVer)
+containerProtoGen=cosmos-sdk-proto-gen-$(containerProtoVer)
+containerProtoGenSwagger=cosmos-sdk-proto-gen-swagger-$(containerProtoVer)
+containerProtoFmt=cosmos-sdk-proto-fmt-$(containerProtoVer)
 
 proto-all: proto-format proto-lint proto-gen
 
 proto-gen:
 	@echo "Generating Protobuf files"
-	@cd proto;\
-	buf generate --template=buf.gen.gogo.yaml;\
-	cd ..;\
-	cp -r github.com/soohoio/stayking-template-chain/* .;\
-	rm -rf github.com
+	$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace tendermintdev/sdk-proto-gen sh ./scripts/protocgen.sh
 
-proto-lint:
-	@buf lint proto
+proto-swagger-gen:
+	@echo "Generating Protobuf Swagger"
+	$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace ghcr.io/cosmos/proto-builder:0.12.0 sh ./scripts/protoc-swagger-gen.sh
 
 proto-format:
-	@buf format proto -w
+	@echo "Formatting Protobuf files"
+	@if docker ps -a --format '{{.Names}}' | grep -Eq "^${containerProtoFmt}$$"; then docker start -a $(containerProtoFmt); else docker run --name $(containerProtoFmt) -v $(CURDIR):/workspace --workdir /workspace tendermintdev/docker-build-proto \
+		find ./proto -name "*.proto" -exec clang-format -i {} \; ; fi
 
-.PHONY: proto-all proto-gen proto-lint proto-format
+proto-lint:
+	@$(DOCKER_BUF) lint --error-format=json
+
+.PHONY: proto-all proto-gen proto-format proto-lint
