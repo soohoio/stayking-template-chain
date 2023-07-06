@@ -1,4 +1,4 @@
-package chaos
+package stayking
 
 import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -10,14 +10,14 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	chaosapp "github.com/cosmos-builders/chaos/app"
+	staykingapp "github.com/soohoio/stayking-template-chain/app"
 )
 
 var (
 	_ = storetypes.MemoryStoreKey{}
 	_ = sdkerrors.Wrap
 	_ = tmproto.Header{}
-	_ = chaosapp.Setup
+	_ = staykingapp.Setup
 	_ = codectypes.AminoJSONPacker{}
 	_ = cryptocodec.RegisterCrypto
 	_ = authzcodec.Amino

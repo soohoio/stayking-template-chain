@@ -14,7 +14,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 
-	"github.com/cosmos-builders/chaos/app"
+	"github.com/soohoio/stayking-template-chain/app"
 )
 
 func init() {

@@ -1,6 +1,6 @@
-module github.com/cosmos-builders/chaos
+module github.com/soohoio/stayking-template-chain
 
-go 1.18
+go 1.20
 
 require (
 	github.com/cosmos/cosmos-sdk v0.46.6

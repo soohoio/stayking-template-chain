@@ -104,13 +104,13 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	appparams "github.com/cosmos-builders/chaos/app/params"
-	"github.com/cosmos-builders/chaos/docs"
+	appparams "github.com/soohoio/stayking-template-chain/app/params"
+	"github.com/soohoio/stayking-template-chain/docs"
 )
 
 const (
 	AccountAddressPrefix = "cosmos"
-	Name                 = "chaos"
+	Name                 = "stayking"
 )
 
 func getGovProposalHandlers() []govclient.ProposalHandler {

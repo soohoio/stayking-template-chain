@@ -186,7 +186,7 @@ proto-gen:
 	@cd proto;\
 	buf generate --template=buf.gen.gogo.yaml;\
 	cd ..;\
-	cp -r github.com/cosmos-builders/chaos/* .;\
+	cp -r github.com/soohoio/stayking-template-chain/* .;\
 	rm -rf github.com
 
 proto-lint:
