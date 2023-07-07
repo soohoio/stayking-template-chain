@@ -18,15 +18,19 @@ type Keeper struct {
 }
 
 func NewKeeper(
-	cdc codec.BinaryCodec, storeKey storetypes.StoreKey,
-	paramSpace paramstypes.Subspace, bankKeeper types.BankKeeper,
+	cdc codec.BinaryCodec,
+	storeKey storetypes.StoreKey,
+	paramSpace paramstypes.Subspace,
+	bankKeeper types.BankKeeper,
 ) Keeper {
 	if !paramSpace.HasKeyTable() {
 		paramSpace = paramSpace.WithKeyTable(types.ParamKeyTable())
 	}
 	return Keeper{
-		cdc: cdc, storeKey: storeKey,
-		paramSpace: paramSpace, bankKeeper: bankKeeper,
+		cdc:        cdc,
+		storeKey:   storeKey,
+		paramSpace: paramSpace,
+		bankKeeper: bankKeeper,
 	}
 }
 
