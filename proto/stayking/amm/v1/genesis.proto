@@ -6,4 +6,6 @@ import "stayking/amm/v1/params.proto";
 
 option go_package = "github.com/soohoio/stayking-template-chain/x/amm/types";
 
-message GenesisState { Params params = 1 [ (gogoproto.nullable) = false ]; }
+message GenesisState {
+  Params params = 1 [ (gogoproto.nullable) = false ];
+}
