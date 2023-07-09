@@ -1,0 +1,10 @@
+syntax = "proto3";
+package stayking.amm.v1;
+
+option go_package = "github.com/soohoio/stayking-template-chain/x/amm/types";
+
+message Pair {
+  uint64 id = 1;
+  string denom0 = 2;
+  string denom1 = 3;
+}

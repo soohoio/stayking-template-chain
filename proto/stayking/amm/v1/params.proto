@@ -5,4 +5,17 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/soohoio/stayking-template-chain/x/amm/types";
 
-message Params { option (gogoproto.goproto_stringer) = false; }
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+
+  string fee_rate = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+
+  string min_initial_liquidity = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable) = false
+  ];
+
+}

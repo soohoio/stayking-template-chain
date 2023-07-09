@@ -9,6 +9,7 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	"github.com/cosmos/cosmos-sdk/x/nft/client/cli"
@@ -17,6 +18,7 @@ import (
 	"github.com/soohoio/stayking-template-chain/x/amm/types"
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/libs/rand"
 )
 
 var (
@@ -120,4 +122,44 @@ func (AppModuleBasic) GetTxCmd() *cobra.Command {
 
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 	return cli.GetQueryCmd()
+}
+
+// BeginBlock contains the logic that is automatically triggered at the beginning of each block
+func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
+
+// EndBlock contains the logic that is automatically triggered at the end of each block
+func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
+	return []abci.ValidatorUpdate{}
+}
+
+// GenerateGenesisState creates a randomized GenState of the module
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
+	accs := make([]string, len(simState.Accounts))
+	for i, acc := range simState.Accounts {
+		accs[i] = acc.Address.String()
+	}
+	ammGenesis := types.GenesisState{
+		Params: types.DefaultParams(),
+	}
+	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&ammGenesis)
+}
+
+// ProposalContents doesn't return any content functions for governance proposals
+func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalContent {
+	return nil
+}
+
+// RandomizedParams creates randomized  param changes for the simulator
+func (am AppModule) RandomizedParams(_ *rand.Rand) []simtypes.ParamChange {
+	return []simtypes.ParamChange{}
+}
+
+// RegisterStoreDecoder registers a decoder
+func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
+
+// WeightedOperations returns the all the gov module operations with their respective weights.
+func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+	operations := make([]simtypes.WeightedOperation, 0)
+
+	return operations
 }

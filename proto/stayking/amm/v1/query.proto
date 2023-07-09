@@ -4,12 +4,21 @@ package stayking.amm.v1;
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "stayking/amm/v1/params.proto";
+import "stayking/amm/v1/amm.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
 
 option go_package = "github.com/soohoio/stayking-template-chain/x/amm/types";
+option (gogoproto.goproto_getters_all) = false;
 
 service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/stayking/amm/v1/params";
+  }
+  rpc Pairs(QueryPairsRequest) returns (QueryPairsResponse) {
+    option (google.api.http).get = "/stayking/amm/v1beta1/pairs";
+  }
+  rpc Pair(QueryPairRequest) returns (QueryPairResponse) {
+    option (google.api.http).get = "/stayking/amm/v1beta1/pairs/{id}";
   }
 }
 
@@ -17,4 +26,21 @@ message QueryParamsRequest {}
 
 message QueryParamsResponse {
   Params params = 1 [ (gogoproto.nullable) = false ];
+}
+
+message QueryPairsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryPairsResponse {
+  repeated Pair pairs = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryPairRequest {
+  uint64 id = 1;
+}
+
+message QueryPairResponse {
+  Pair pair = 1 [(gogoproto.nullable) = false];
 }

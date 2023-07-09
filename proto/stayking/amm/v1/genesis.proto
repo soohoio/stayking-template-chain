@@ -3,9 +3,12 @@ package stayking.amm.v1;
 
 import "gogoproto/gogo.proto";
 import "stayking/amm/v1/params.proto";
+import "stayking/amm/v1/amm.proto";
 
 option go_package = "github.com/soohoio/stayking-template-chain/x/amm/types";
 
 message GenesisState {
   Params params = 1 [ (gogoproto.nullable) = false ];
+  uint64 last_pair_id = 2;
+  repeated Pair pairs = 3 [(gogoproto.nullable) = false];
 }
