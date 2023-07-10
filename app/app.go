@@ -2,9 +2,6 @@ package app
 
 import (
 	"fmt"
-	"github.com/soohoio/stayking-template-chain/x/amm"
-	ammkeeper "github.com/soohoio/stayking-template-chain/x/amm/keeper"
-	ammtypes "github.com/soohoio/stayking-template-chain/x/amm/types"
 	"io"
 	"net/http"
 	"os"
@@ -109,11 +106,14 @@ import (
 
 	appparams "github.com/soohoio/stayking-template-chain/app/params"
 	"github.com/soohoio/stayking-template-chain/docs"
+	"github.com/soohoio/stayking-template-chain/x/amm"
+	ammkeeper "github.com/soohoio/stayking-template-chain/x/amm/keeper"
+	ammtypes "github.com/soohoio/stayking-template-chain/x/amm/types"
 )
 
 const (
 	AccountAddressPrefix = "cosmos"
-	Name                 = "stayking"
+	Name                 = "staykingamm"
 )
 
 func getGovProposalHandlers() []govclient.ProposalHandler {
