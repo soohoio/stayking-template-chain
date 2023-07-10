@@ -10,10 +10,10 @@ import (
 )
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgAddLiquidity{}, "chaos/MsgAddLiquidity", nil)
-	cdc.RegisterConcrete(&MsgRemoveLiquidity{}, "chaos/MsgRemoveLiquidity", nil)
-	cdc.RegisterConcrete(&MsgSwapExactIn{}, "chaos/MsgSwapExactIn", nil)
-	cdc.RegisterConcrete(&MsgSwapExactOut{}, "chaos/MsgSwapExactOut", nil)
+	cdc.RegisterConcrete(&MsgAddLiquidity{}, "amm/MsgAddLiquidity", nil)
+	cdc.RegisterConcrete(&MsgRemoveLiquidity{}, "amm/MsgRemoveLiquidity", nil)
+	cdc.RegisterConcrete(&MsgSwapExactIn{}, "amm/MsgSwapExactIn", nil)
+	cdc.RegisterConcrete(&MsgSwapExactOut{}, "amm/MsgSwapExactOut", nil)
 }
 
 func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
