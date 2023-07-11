@@ -3,11 +3,11 @@ package types
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"gopkg.in/yaml.v3"
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	"gopkg.in/yaml.v2"
 )
 
-var _ paramstypes.ParamSet = (*Params)(nil)
+var _ paramtypes.ParamSet = (*Params)(nil)
 
 var (
 	KeyFeeRate             = []byte("FeeRate")
@@ -20,8 +20,8 @@ var (
 )
 
 // ParamKeyTable the param key table for launch module
-func ParamKeyTable() paramstypes.KeyTable {
-	return paramstypes.NewKeyTable().RegisterParamSet(&Params{})
+func ParamKeyTable() paramtypes.KeyTable {
+	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
 }
 
 // NewParams creates a new Params instance
@@ -38,10 +38,10 @@ func DefaultParams() Params {
 }
 
 // ParamSetPairs get the params.ParamSet
-func (params *Params) ParamSetPairs() paramstypes.ParamSetPairs {
-	return paramstypes.ParamSetPairs{
-		paramstypes.NewParamSetPair(KeyFeeRate, &params.FeeRate, validateFeeRate),
-		paramstypes.NewParamSetPair(KeyMinInitialLiquidity, &params.MinInitialLiquidity, validateMinInitialLiquidity),
+func (params *Params) ParamSetPairs() paramtypes.ParamSetPairs {
+	return paramtypes.ParamSetPairs{
+		paramtypes.NewParamSetPair(KeyFeeRate, &params.FeeRate, validateFeeRate),
+		paramtypes.NewParamSetPair(KeyMinInitialLiquidity, &params.MinInitialLiquidity, validateMinInitialLiquidity),
 	}
 }
 
@@ -57,8 +57,8 @@ func (params Params) Validate() error {
 }
 
 // String implements the Stringer interface.
-func (params Params) String() string {
-	out, _ := yaml.Marshal(params)
+func (p Params) String() string {
+	out, _ := yaml.Marshal(p)
 	return string(out)
 }
 

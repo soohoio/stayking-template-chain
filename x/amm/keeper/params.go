@@ -5,11 +5,13 @@ import (
 	"github.com/soohoio/stayking-template-chain/x/amm/types"
 )
 
+// GetParams get all parameters as types.Params
 func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
-	k.paramSpace.SetParamSet(ctx, &params)
+	k.paramSpace.GetParamSet(ctx, &params)
 	return
 }
 
+// SetParams set the params
 func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
 	k.paramSpace.SetParamSet(ctx, &params)
 }

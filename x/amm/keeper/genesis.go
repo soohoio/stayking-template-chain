@@ -5,6 +5,7 @@ import (
 	"github.com/soohoio/stayking-template-chain/x/amm/types"
 )
 
+// InitGenesis initializes the module's state from a provided genesis state.
 func (k Keeper) InitGenesis(ctx sdk.Context, genState types.GenesisState) {
 	k.SetParams(ctx, genState.Params)
 	k.SetLastPairID(ctx, genState.LastPairId)
@@ -14,6 +15,7 @@ func (k Keeper) InitGenesis(ctx sdk.Context, genState types.GenesisState) {
 	}
 }
 
+// ExportGenesis returns the module's exported genesis
 func (k Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return types.NewGenesisState(
 		k.GetParams(ctx),
