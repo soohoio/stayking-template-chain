@@ -14,8 +14,6 @@ const (
 	ShareDenomPrefix         = "amm/share/"
 )
 
-var MinInitialLiquidity = sdk.NewInt(1000)
-
 func NewPair(id uint64, denom0, denom1 string) Pair {
 	return Pair{
 		Id:     id,

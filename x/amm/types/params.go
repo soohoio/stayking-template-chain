@@ -19,6 +19,12 @@ var (
 	DefaultMinInitialLiquidity = sdk.NewInt(1000)
 )
 
+// ParamKeyTable the param key table for launch module
+func ParamKeyTable() paramstypes.KeyTable {
+	return paramstypes.NewKeyTable().RegisterParamSet(&Params{})
+}
+
+// NewParams creates a new Params instance
 func NewParams(feeRate sdk.Dec, minInitialLiquidity sdk.Int) Params {
 	return Params{
 		FeeRate:             feeRate,
@@ -26,41 +32,54 @@ func NewParams(feeRate sdk.Dec, minInitialLiquidity sdk.Int) Params {
 	}
 }
 
+// DefaultParams returns a default set of parameters
 func DefaultParams() Params {
 	return NewParams(DefaultFeeRate, DefaultMinInitialLiquidity)
 }
 
-func ParamKeyTable() paramstypes.KeyTable {
-	return paramstypes.NewKeyTable().RegisterParamSet(&Params{})
+// ParamSetPairs get the params.ParamSet
+func (params *Params) ParamSetPairs() paramstypes.ParamSetPairs {
+	return paramstypes.ParamSetPairs{
+		paramstypes.NewParamSetPair(KeyFeeRate, &params.FeeRate, validateFeeRate),
+		paramstypes.NewParamSetPair(KeyMinInitialLiquidity, &params.MinInitialLiquidity, validateMinInitialLiquidity),
+	}
 }
 
-func (params *Params) Validate() error {
-	if err := validagteFeeRate(params.FeeRate); err != nil {
+// Validate validates the set of params
+func (params Params) Validate() error {
+	if err := validateFeeRate(params.FeeRate); err != nil {
 		return err
 	}
-
+	if err := validateMinInitialLiquidity(params.MinInitialLiquidity); err != nil {
+		return err
+	}
 	return nil
 }
 
-func (params *Params) String() string {
+// String implements the Stringer interface.
+func (params Params) String() string {
 	out, _ := yaml.Marshal(params)
-
 	return string(out)
 }
 
-func (params *Params) ParamSetPairs() paramstypes.ParamSetPairs {
-	return paramstypes.ParamSetPairs{}
-}
-
-func validagteFeeRate(i interface{}) error {
+func validateFeeRate(i interface{}) error {
 	v, ok := i.(sdk.Dec)
-
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
-
 	if v.IsNegative() {
-		return fmt.Errorf("fee rate must not be negative : %s", v)
+		return fmt.Errorf("fee rate must not be negative: %s", v)
+	}
+	return nil
+}
+
+func validateMinInitialLiquidity(i interface{}) error {
+	v, ok := i.(sdk.Int)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+	if v.IsNegative() {
+		return fmt.Errorf("min initial liquidity must not be negative: %s", v)
 	}
 	return nil
 }
